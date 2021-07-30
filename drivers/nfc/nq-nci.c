@@ -1,4 +1,5 @@
 /* Copyright (c) 2015-2019, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -29,6 +30,8 @@
 #include <linux/compat.h>
 #endif
 #include <linux/jiffies.h>
+
+#define LC_NFC_CHECK
 
 struct nqx_platform_data {
 	unsigned int irq_gpio;
@@ -1438,6 +1441,8 @@ static int nqx_probe(struct i2c_client *client,
 	}
 	nqx_disable_irq(nqx_dev);
 
+	goto skip_nfcc_hw_check;
+	
 	/*
 	 * To be efficient we need to test whether nfcc hardware is physically
 	 * present before attempting further hardware initialisation.
@@ -1450,6 +1455,8 @@ static int nqx_probe(struct i2c_client *client,
 		/* We don't think there is hardware switch NFC OFF */
 		goto err_request_hw_check_failed;
 	}
+	
+skip_nfcc_hw_check:
 
 	/* Register reboot notifier here */
 	r = register_reboot_notifier(&nfcc_notifier);
@@ -1614,8 +1621,6 @@ static int nfcc_reboot(struct notifier_block *notifier, unsigned long val,
 	gpio_set_value(disable_ctrl, 1);
 	return NOTIFY_OK;
 }
-
-#define LC_NFC_CHECK
 
 #ifdef LC_NFC_CHECK
 
