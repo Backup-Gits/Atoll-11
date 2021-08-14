@@ -61,8 +61,6 @@ static void replace_safetynet_flags(char *cmd)
 			  "androidboot.enable_dm_verity=1");
 	replace_flag(cmd, "androidboot.secboot=disabled",
 			  "androidboot.secboot=enabled ");
-	replace_flag(cmd, "androidboot.verifiedbootstate=orange",
-			  "androidboot.verifiedbootstate=green ");
 	replace_flag(cmd, "androidboot.veritymode=logging",
 			  "androidboot.veritymode=enforcing");
 	replace_flag(cmd, "androidboot.veritymode=eio",
